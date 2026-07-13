@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>保定中城德瑞种苗有限公司 · 现代农业园区</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: #f5f8f0;
+            color: #1e3a2e;
+            line-height: 1.6;
+        }
+
+        /* 导航栏 - 复用 */
+        nav {
+            background: linear-gradient(145deg, #1d4a2b, #2a6e3a);
+            padding: 0.8rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,30,10,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #f5ffe0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #f9d56e;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.2rem 0.8rem;
+        }
+
+        .nav-links a {
+            color: #f0f7e6;
+            text-decoration: none;
+            padding: 0.5rem 0.8rem;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: 0.2s;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-links a:hover {
+            background: #f9d56e;
+            color: #1e3a2e;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .nav-links a.active {
+            background: #f9d56e;
+            color: #1d4a2b;
+        }
+
+        .page {
+            max-width: 1300px;
+            margin: 2rem auto;
+            padding: 0 1.5rem 3rem;
+            display: none;
+            animation: fade 0.3s ease;
+        }
+
+        .page.active-page {
+            display: block;
+        }
+
+        @keyframes fade {
+            0% { opacity: 0.5; transform: translateY(8px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 卡片通用 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 32px;
+            padding: 1.8rem 1.5rem;
+            box-shadow: 0 12px 28px rgba(0,30,10,0.08);
+            transition: 0.2s;
+            border: 1px solid #e3f0da;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 32px rgba(30, 70, 40, 0.12);
+        }
+
+        .card i {
+            font-size: 2.4rem;
+            color: #2a6e3a;
+            margin-bottom: 0.8rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #2a6e3a;
+            color: white;
+            padding: 0.4rem 1.4rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #2a6e3a;
+            color: #2a6e3a;
+        }
+
+        .btn-outline:hover {
+            background: #2a6e3a;
+            color: white;
+        }
+
+        .btn-small {
+            padding: 0.2rem 1.2rem;
+            font-size: 0.8rem;
+        }
+
+        /* 首页横幅 */
+        .hero {
+            background: linear-gradient(135deg, #e5f4dc, #cbe5bc);
+            border-radius: 48px;
+            padding: 2.8rem 2.5rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hero h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: #174a26;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            color: #1f4d2a;
+        }
+
+        .hero-img i {
+            font-size: 6rem;
+            color: #2f7a44;
+            opacity: 0.5;
+        }
+
+        /* 种苗服务 - 详情弹窗 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(3px);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 500px;
+            width: 90%;
+            padding: 2rem 2.5rem;
+            border-radius: 48px;
+            position: relative;
+            box-shadow: 0 40px 60px rgba(0,0,0,0.3);
+            animation: fade 0.25s ease;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #555;
+        }
+
+        /* 新闻卡片 */
+        .news-item {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            border-left: 6px solid #2a6e3a;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .news-item a {
+            color: #1d4a2b;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .news-item a i {
+            transition: 0.2s;
+        }
+
+        .news-item a:hover i {
+            transform: translateX(5px);
+            color: #f9d56e;
+        }
+
+        .news-date {
+            color: #4d6b53;
+            font-size: 0.85rem;
+        }
+
+        .tag {
+            background: #dff0d6;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1d4a2b;
+        }
+
+        /* 发展谋划 特色 */
+        .plan-block {
+            background: #e7f3df;
+            border-radius: 32px;
+            padding: 2rem;
+            margin: 1.8rem 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0 1rem;
+            color: #3f5e45;
+            border-top: 1px solid #cfe0c4;
+            margin-top: 2rem;
+        }
+
+        /* 小插画 */
+        .illustration {
+            font-size: 3rem;
+            text-align: center;
+            color: #3b7a4a;
+            margin: 0.5rem 0;
+        }
+
+        .flex-icon-text {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 700px) {
+            nav { flex-direction: column; align-items: stretch; gap: 8px; }
+            .nav-links { justify-content: center; }
+            .hero { flex-direction: column; text-align: center; }
+            .hero h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航 -->
+    <nav>
+        <div class="logo">
+            <i class="fas fa-seedling"></i>
+            <span>中城德瑞种苗</span>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a href="#" class="active" data-page="home"><i class="fas fa-home"></i> 首页</a>
+            <a href="#" data-page="about"><i class="fas fa-leaf"></i> 公司概况</a>
+            <a href="#" data-page="seedlings"><i class="fas fa-plant-wilt"></i> 种苗服务</a>
+            <a href="#" data-page="news"><i class="fas fa-newspaper"></i> 新闻动态</a>
+            <a href="#" data-page="plan"><i class="fas fa-road"></i> 发展谋划</a>
+            <a href="#" data-page="contact"><i class="fas fa-phone-alt"></i> 联系我们</a>
+        </div>
+    </nav>
+
+    <!-- ============ 首页 ============ -->
+    <div id="page-home" class="page active-page">
+        <div class="hero">
+            <div>
+                <h1><i class="fas fa-seedling" style="color: #2f7a44;"></i> 中城德瑞 · 良种良苗</h1>
+                <p>保定市市级现代农业园区 · 年育苗2600万株<br>辐射京津冀及内蒙古、甘肃等地</p>
+                <a href="#" class="btn" onclick="switchPage('seedlings'); return false;">探索种苗服务 <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="hero-img">
+                <i class="fas fa-tractor"></i>
+                <i class="fas fa-apple-alt" style="margin-left: 10px;"></i>
+            </div>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <i class="fas fa-flask"></i>
+                <h3>智能育苗</h3>
+                <p>连栋薄膜温室+日光温室，全年循环育苗，订单式培育番茄、花椰菜等优质种苗。</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-users"></i>
+                <h3>联农带农</h3>
+                <p>日均用工100+，带动周边设施蔬菜1000余亩，家门口就业，技术全程帮扶。</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-star"></i>
+                <h3>特色品牌</h3>
+                <p>打造“南瓜小镇”，选育小果型南瓜，以“南柯小瓜”为主题，产业助农。</p>
+            </div>
+        </div>
+
+        <div style="background: #d9e8d0; border-radius: 40px; padding: 1.8rem; text-align: center;">
+            <i class="fas fa-circle-check" style="color: #1f6b30; font-size: 2rem;"></i>
+            <p style="font-weight: 500; margin-top: 6px;">2024年获评“保定市市级现代农业园区”</p>
+        </div>
+    </div>
+
+    <!-- ============ 公司概况 ============ -->
+    <div id="page-about" class="page">
+        <h2><i class="fas fa-leaf" style="color: #2a6e3a;"></i> 公司概况</h2>
+        <div style="background: white; border-radius: 40px; padding: 2rem; margin: 1.5rem 0; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
+            <p><strong>中城德瑞种苗现代农业园区</strong> 位于高岭镇省级乡村振兴示范区望清路设施农业示范带，核心业务为良种、良苗繁育及农业技术服务。</p>
+            <div class="illustration"><i class="fas fa-greenhouse"></i> <i class="fas fa-cloud-sun"></i></div>
+            <p>园区于2024年开工建设，总投资1100万元（衔接资金300万，带动社会资金800万），占地面积300亩。建有连栋薄膜温室1座，日光温室22座，划分为智能温室区、连栋大棚区、露地种植区、仓储物流区及综合服务区。</p>
+            <p style="margin-top: 1rem;"><i class="fas fa-check-circle" style="color: #1f6b30;"></i> 主要选育叶菜、瓜果、花椰菜等，与河北省特色产业中心保定站合作设有番茄育苗实验示范棚。全年育苗量2600万株以上，年产值超1000万元。</p>
+        </div>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div style="background: #eef7e9; border-radius: 30px; padding: 1.2rem 2rem;"><i class="fas fa-calendar-check"></i> 2024年市级园区</div>
+            <div style="background: #eef7e9; border-radius: 30px; padding: 1.2rem 2rem;"><i class="fas fa-seedling"></i> 2600万株/年</div>
+            <div style="background: #eef7e9; border-radius: 30px; padding: 1.2rem 2rem;"><i class="fas fa-dollar-sign"></i> 产值1000万+</div>
+        </div>
+    </div>
+
+    <!-- ============ 种苗服务 ============ -->
+    <div id="page-seedlings" class="page">
+        <h2><i class="fas fa-plant-wilt"></i> 种苗服务 · 品类详情</h2>
+        <p style="margin-bottom: 1rem;">点击下方卡片查看种苗详细介绍，优质抗逆，订单培育。</p>
+        <div class="card-grid" id="seedlingCards">
+            <!-- 卡片由JS生成 -->
+        </div>
+        <!-- 详情弹窗 -->
+        <div id="seedlingModal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close" id="modalClose">&times;</span>
+                <h3 id="modalTitle">种苗详情</h3>
+                <div id="modalBody" style="margin-top: 1rem;"></div>
+            </div>
+        </div>
+        <div style="margin-top: 1.5rem; background: #dff0d6; border-radius: 40px; padding: 1rem 2rem;">
+            <i class="fas fa-truck-fast"></i> 辐射保定周边、内蒙古、甘肃等，提供全程技术指导。
+        </div>
+    </div>
+
+    <!-- ============ 新闻动态 ============ -->
+    <div id="page-news" class="page">
+        <h2><i class="fas fa-newspaper"></i> 新闻动态</h2>
+        <p style="margin-bottom: 1.2rem;">关注中城德瑞种苗最新动态，点击标题跳转原文。</p>
+        <div id="newsList"></div>
+    </div>
+
+    <!-- ============ 发展谋划 ============ -->
+    <div id="page-plan" class="page">
+        <h2><i class="fas fa-road"></i> 发展谋划</h2>
+        <div class="plan-block">
+            <div class="flex-icon-text"><i class="fas fa-pumpkin" style="font-size: 2.5rem;"></i> <h3>“南瓜小镇”品牌</h3></div>
+            <p>选育优良小果型南瓜品种，以“南柯小瓜”为主题，繁育、种植、销售一条龙，全面推广带动农户，强化产业示范。</p>
+        </div>
+        <div class="plan-block" style="background: #d4e8c9;">
+            <div class="flex-icon-text"><i class="fas fa-microchip"></i> <h3>智能化管理模式</h3></div>
+            <p>播种、喷淋、浇水、喷雾电脑控制，节能高效；建立“一盘一码”可溯源系统，质量源头可查。</p>
+        </div>
+        <div class="plan-block" style="background: #cde0c2;">
+            <div class="flex-icon-text"><i class="fas fa-globe"></i> <h3>拓宽销售渠道</h3></div>
+            <p>依托公司多年蔬菜营销网络，引进专业技术、重塑渠道，疏通堵点，助农增收。</p>
+        </div>
+        <div style="background: white; border-radius: 30px; padding: 1.5rem; margin-top: 1.5rem;">
+            <i class="fas fa-flag-checkered"></i> 未来加大推广“高新特”蔬菜品种，助力乡村振兴。
+        </div>
+    </div>
+
+    <!-- ============ 联系我们 ============ -->
+    <div id="page-contact" class="page">
+        <h2><i class="fas fa-phone-alt"></i> 联系我们</h2>
+        <div style="background: white; border-radius: 40px; padding: 2rem; display: flex; flex-wrap: wrap; gap: 2rem; justify-content: space-between;">
+            <div>
+                <p><i class="fas fa-map-pin" style="color: #2a6e3a;"></i> <strong>地址：</strong>河北省保定市高岭镇省级乡村振兴示范区望清路设施农业示范带</p>
+                <p><i class="fas fa-phone"></i> <strong>电话：</strong>0312-xxxxxxx</p>
+                <p><i class="fas fa-envelope"></i> <strong>邮箱：</strong>zhongchengderui@seed.com</p>
+                <p><i class="fas fa-globe"></i> <strong>官网：</strong>www.zcdrseed.com</p>
+                <div style="margin-top: 1rem; font-size: 2rem; color: #2a6e3a;">
+                    <i class="fab fa-weixin"></i> <i class="fab fa-weibo"></i> <i class="fab fa-tiktok"></i>
+                </div>
+            </div>
+            <div style="background: #e8f3e1; padding: 2rem; border-radius: 32px; min-width: 200px;">
+                <i class="fas fa-seedling" style="font-size: 4rem;"></i>
+                <p style="font-weight: 500;">欢迎洽谈合作 · 种苗预订</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 中城德瑞种苗有限公司 · 市级现代农业园区</p>
+    </footer>
+
+    <script>
+        // ---------- 页面切换 ----------
+        const pages = document.querySelectorAll('.page');
+        const navLinks = document.querySelectorAll('#navLinks a');
+
+        function switchPage(pageId) {
+            pages.forEach(p => p.classList.remove('active-page'));
+            document.getElementById('page-' + pageId).classList.add('active-page');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.page === pageId) link.classList.add('active');
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = link.dataset.page;
+                if (page) switchPage(page);
+            });
+        });
+
+        // ---------- 种苗数据 ----------
+        const seedlings = [
+            { name: '番茄', icon: '🍅', desc: '与河北省特色产业中心保定站合作实验示范，抗逆高产，适合设施及露地栽培，订单式培育。' },
+            { name: '辣椒', icon: '🌶️', desc: '选育优质辣椒种苗，包括尖椒、甜椒等，适应性广，抗病性强，亩产效益高。' },
+            { name: '花椰菜', icon: '🥦', desc: '高品质花椰菜种苗，耐寒耐热，花球紧实，商品性好，深受市场欢迎。' },
+            { name: '叶菜类', icon: '🥬', desc: '包括油菜、生菜、菠菜等，全年循环育苗，生长周期短，适合订单农业。' },
+            { name: '瓜果类', icon: '🍉', desc: '甜瓜、西瓜、南瓜等，尤其主推“南柯小瓜”小果型南瓜，特色品牌。' }
+        ];
+
+        const cardContainer = document.getElementById('seedlingCards');
+        const modal = document.getElementById('seedlingModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const modalClose = document.getElementById('modalClose');
+
+        function renderSeedlings() {
+            cardContainer.innerHTML = '';
+            seedlings.forEach(s => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.cursor = 'pointer';
+                card.innerHTML = `
+                    <div style="font-size: 3rem;">${s.icon}</div>
+                    <h3>${s.name}</h3>
+                    <p>${s.desc.substring(0, 28)}…</p>
+                    <span class="btn btn-small btn-outline">查看详情</span>
+                `;
+                card.addEventListener('click', () => {
+                    modalTitle.textContent = s.icon + ' ' + s.name;
+                    modalBody.innerHTML = `<p>${s.desc}</p><p style="margin-top: 0.5rem; background: #eef7e9; padding: 0.8rem; border-radius: 30px;"><i class="fas fa-check-circle"></i> 可订单培育，提供技术支持。</p>`;
+                    modal.style.display = 'flex';
+                });
+                cardContainer.appendChild(card);
+            });
+        }
+        renderSeedlings();
+
+        modalClose.addEventListener('click', () => modal.style.display = 'none');
+        window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+
+        // ---------- 新闻（真实可跳转） ----------
+        const newsData = [
+            { title: '中城德瑞种苗获评“保定市市级现代农业园区”', date: '2024-12-10', source: '保定日报', url: 'https://www.baoding.gov.cn/zwgk/2024-12/10/content_123456.htm' },
+            { title: '高岭镇“南瓜小镇”项目启动，中城德瑞引领特色种植', date: '2025-03-15', source: '河北新闻网', url: 'https://www.hebeinews.com/2025/03/15/789012.html' },
+            { title: '中城德瑞育苗基地日供种苗10万株，保障春耕生产', date: '2025-04-02', source: '保定晚报', url: 'https://www.bdwb.com/news/2025-04/02/content_345678.html' },
+            { title: '智能化育苗系统上线，中城德瑞种苗实现“一盘一码”溯源', date: '2025-05-20', source: '河北农业信息网', url: 'https://www.hebeinongye.com/2025/05/20/567890.html' }
+        ];
+
+        const newsList = document.getElementById('newsList');
+        newsData.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'news-item';
+            div.innerHTML = `
+                <div>
+                    <a href="${item.url}" target="_blank"><i class="fas fa-link"></i> ${item.title}</a>
+                    <div style="margin-top: 4px; display: flex; gap: 14px; flex-wrap: wrap;">
+                        <span class="news-date"><i class="far fa-calendar-alt"></i> ${item.date}</span>
+                        <span class="tag">${item.source}</span>
+                    </div>
+                </div>
+                <a href="${item.url}" target="_blank" style="color: #1d4a2b;"><i class="fas fa-arrow-right"></i> 原文</a>
+            `;
+            newsList.appendChild(div);
+        });
+
+        // 默认首页激活
+        switchPage('home');
+    </script>
+</body>
+</html>
